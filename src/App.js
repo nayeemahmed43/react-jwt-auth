@@ -1,24 +1,52 @@
-import React from 'react';
+import React, { useState } from 'react';
 import logo from './logo.svg';
 import './App.css';
 
 function App() {
+  const [email,setEmail] = useState('');
+  const [password,setPassword] = useState('');
+  const [isLogin,setIsLogin] = useState(false);
+  console.log(email, password);
+
+  const login = () => {
+    const loginData = {email,password}
+        fetch('https://admin.barikoi.xyz:8090/auth/login',{
+          method: 'POST',
+          headers:{
+            'Content-Type': 'application/json'
+          },
+          body: JSON.stringify(loginData)
+        })
+        .then(res => {
+          res.json().then((result => {
+            console.warn("result",result);
+            setIsLogin(result.success);
+            if(!result.success)alert(result.message);
+            localStorage.setItem('login',JSON.stringify({
+              login: true,
+              token: result.token
+            }))
+            
+          }))
+        })
+  }
   return (
     <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+      <h1>React Authentication using JWT </h1>
+      {
+        !isLogin ? 
+        <div>
+           <input type="text" onChange={(e) => setEmail(e.target.value)}/> <br/>
+        <input type="password" onChange={(e) => {setPassword(e.target.value)}}/> <br/>
+        <button onClick={login}>Login</button>
+        </div>
+        :
+        <div>
+         <h3 style={{color:"green"}}>Congratulations!!</h3>
+         <h3 style={{color:"green"}}>Login Successfull</h3>
+        </div>
+      }
+      
     </div>
   );
 }

@@ -36,8 +36,8 @@ function App() {
       {
         !isLogin ? 
         <div>
-           <input type="text" onChange={(e) => setEmail(e.target.value)}/> <br/>
-        <input type="password" onChange={(e) => {setPassword(e.target.value)}}/> <br/>
+           <input type="text" onChange={(e) => setEmail(e.target.value)} placeholder="Email"/> <br/><br/>
+        <input type="password" onChange={(e) => {setPassword(e.target.value)}} placeholder="Password"/> <br/><br/>
         <button onClick={login}>Login</button>
         </div>
         :
